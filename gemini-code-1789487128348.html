@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attestation de Scolarité</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        /* --- Style du Formulaire --- */
+        .no-print {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .no-print h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .field {
+            flex: 1 1 calc(50% - 15px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        input:focus, select:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+
+        .btn-print {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-print:hover {
+            background-color: #003d80;
+        }
+
+        /* --- Style du Document d'Attestation --- */
+        .print-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 15mm;
+            margin: 0 auto;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        .table_header {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table_header td {
+            vertical-align: top;
+        }
+
+        .table_header_td1 {
+            text-align: left;
+            width: 35%;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .table_header_td3 {
+            text-align: right;
+            width: 35%;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Titre bilingue */
+        .attestation-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            padding: 10px 20px;
+            font-weight: bold;
+            width: 85%;
+            margin: 30px auto 0 auto;
+            font-size: 20px;
+        }
+
+        .content-text {
+            font-size: 16px;
+            margin-top: 50px;
+            line-height: 1.8;
+            padding: 0 20px;
+        }
+
+        .line-item {
+            margin-top: 20px;
+            margin-left: 20px;
+            font-size: 15px;
+        }
+
+        .footer-note {
+            font-size: 12px;
+            margin-top: 120px;
+            padding: 0 20px;
+        }
+
+        .footer-address {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* --- Règles Spécifiques d'Impression --- */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .print-container {
+                width: 100%;
+                margin: 0;
+                padding: 15mm;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FORMULAIRE DE SAISIE (Masqué à l'impression) -->
+    <div class="no-print">
+        <h2>Saisie des données de l'étudiant</h2>
+        <form id="studentForm">
+            <div class="form-group">
+                <div class="field">
+                    <label for="inputPrenom">Prénom de l'étudiant :</label>
+                    <input type="text" id="inputPrenom" placeholder="EX: MOHAMED" oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="field">
+                    <label for="inputNom">Nom de l'étudiant :</label>
+                    <input type="text" id="inputNom" placeholder="EX: ALAOUI" oninput="this.value = this.value.toUpperCase()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field">
+                    <label for="inputDateNaiss">Date de naissance :</label>
+                    <input type="text" id="inputDateNaiss" placeholder="Ex: 30/01/2000">
+                </div>
+                <div class="field">
+                    <label for="inputVilleNaiss">Lieu / Ville de naissance :</label>
+                    <input type="text" id="inputVilleNaiss" placeholder="EX: AGADIR" oninput="this.value = this.value.toUpperCase()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field">
+                    <label for="inputCIN">N° CIN :</label>
+                    <input type="text" id="inputCIN" placeholder="EX: JA15463" oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="field">
+                    <label for="inputCNE">N° CNE :</label>
+                    <input type="text" id="inputCNE" placeholder="EX: D134567891" oninput="this.value = this.value.toUpperCase()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field">
+                    <label for="selectLicence">Filière / Licence :</label>
+                    <select id="selectLicence">
+                        <option value="" selected disabled>-- Sélectionner une filière --</option>
+                        <option value="Droit des affaires">Droit des affaires</option>
+                        <option value="Droit et contentieux privé">Droit et contentieux privé</option>
+                        <option value="Institutions politiques et Action Publique">Institutions politiques et Action Publique</option>
+                        <option value="القانون المدني">القانون المدني</option>
+                        <option value="العلوم الجنائية">العلوم الجنائية</option>
+                        <option value="المهن القانونية والقضائية">المهن القانونية والقضائية</option>
+                        <option value="قانون المال والأعمال">قانون المال والأعمال</option>
+                        <option value="الدراسات الادارية والمالية">الدراسات الادارية والمالية</option>
+                        <option value="الدراسات السياسية و الدولية">الدراسات السياسية و الدولية</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="inputAnneeUniv">Année Universitaire :</label>
+                    <input type="text" id="inputAnneeUniv" value="2026/2027" readonly>
+                </div>
+            </div>
+
+            <button type="button" class="btn-print" onclick="imprimerAttestation()">Imprimer L'Attestation</button>
+        </form>
+    </div>
+
+    <!-- DOCUMENT D'ATTESTATION (Affiché et Imprimé) -->
+    <div class="print-container">
+        <table class="table_header">
+            <tbody>
+                <tr>
+                    <td class="table_header_td1">
+                        <span style="display: block">ROYAUME DU MAROC</span>
+                        <span style="display: block">UNIVERSITE IBN ZOHR</span>
+                        <span style="display: block">FACULTE DES SCIENCES JURIDIQUES</span>
+                        <span style="display: block">ET POLITIQUES - AGADIR</span>
+                    </td>
+                    <td style="text-align: center;">
+                        <img src="C:\Users\hp\Downloads/logo fsjp agadir.jpg" alt="Logo FSJP" style="width:220px;" onerror="this.style.display='none'">
+                    </td>
+                    <td class="table_header_td3" dir="rtl">
+                        <span style="display: block">المملكة المغربية</span>
+                        <span style="display: block">جامعة ابن زهر</span>
+                        <span style="display: block">كلية العلوم القانونية و السياسية</span>
+                        <span style="display: block">أكادير</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+                
+        <!-- Titre en Français et Arabe côte à côte -->
+        <div class="attestation-title">
+            ATTESTATION DE SCOLARITE
+        </div>
+
+        <p class="content-text">&nbsp; &nbsp; &nbsp; Le Doyen de la Faculté des Sciences Juridiques et Politiques d'Agadir, 
+        atteste que l'étudiant(e) : <strong id="outNomPrenom">...</strong></p>
+
+        <p class="line-item">Né(e) le : &nbsp;<strong id="outDateNaiss">...</strong> 
+           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+           à : <strong id="outVilleNaiss">...</strong></p>
+
+        <p class="line-item">CIN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;<strong id="outCIN">...</strong></p>
+        <p class="line-item">CNE &nbsp; &nbsp; &nbsp;: &nbsp;<strong id="outCNE">...</strong></p>
+
+        <p class="line-item">est inscrit(e) en licence : <strong id="outLicence">...</strong></p>
+
+        <p class="line-item">pour l'année universitaire : <strong id="outAnneeUniv">2026/2027</strong></p>
+
+        <p class="line-item" style="margin-top: 30px;">Cette Attestation est délivrée à l'intéressé(e) pour servir et valoir ce que de droit.</p>
+
+        <p style="margin-top: 100px; text-align: right; margin-right: 50px;">
+            Fait à Agadir le <strong id="outDatePrint">--/--/----</strong>
+        </p>
+
+        <div style="margin-top: 120px;">
+            <p class="footer-note"><strong>N.B:</strong> Il ne peut être délivré qu'un seul exemplaire de la présente attestation. Aucun duplicata ne sera fourni.</p>
+            <hr style="border: none; border-top: 1px dotted #000; width: 95%;">
+            <p class="footer-address">
+                FACULTE DES SCIENCES JURIDIQUES ET POLITIQUES - B.P: 8658 - DAKHLA - AGADIR - TEL: 0528232817 - FAX: 0528232820<br>
+                كلية العلوم القانونية و السياسية ص.ب 8658 - الداخلة أكادير - فاكس 0528232820 هاتف: 0528232817
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function imprimerAttestation() {
+            // 1. Récupération des valeurs du formulaire
+            const prenom = document.getElementById('inputPrenom').value.toUpperCase();
+            const nom = document.getElementById('inputNom').value.toUpperCase();
+            const dateNaiss = document.getElementById('inputDateNaiss').value;
+            const villeNaiss = document.getElementById('inputVilleNaiss').value.toUpperCase();
+            const cin = document.getElementById('inputCIN').value.toUpperCase();
+            const cne = document.getElementById('inputCNE').value.toUpperCase();
+            
+            const selectLicence = document.getElementById('selectLicence');
+            const licence = selectLicence.options[selectLicence.selectedIndex] ? selectLicence.value : "";
+            const anneeUniv = document.getElementById('inputAnneeUniv').value;
+
+            // Validation de la sélection
+            if (!licence) {
+                alert("Veuillez sélectionner une filière / licence !");
+                return;
+            }
+
+            // 2. Injection des données dans le document
+            document.getElementById('outNomPrenom').innerText = prenom + " " + nom;
+            document.getElementById('outDateNaiss').innerText = dateNaiss;
+            document.getElementById('outVilleNaiss').innerText = villeNaiss;
+            document.getElementById('outCIN').innerText = cin;
+            document.getElementById('outCNE').innerText = cne;
+            document.getElementById('outLicence').innerText = licence;
+            document.getElementById('outAnneeUniv').innerText = anneeUniv;
+
+            // 3. Calcul dynamique de la date actuelle au format JJ/MM/AAAA
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            
+            document.getElementById('outDatePrint').innerText = `${day}/${month}/${year}`;
+
+            // 4. Lancement de l'impression
+            window.print();
+        }
+    </script>
+</body>
+</html>
